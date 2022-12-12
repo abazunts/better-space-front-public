@@ -40,5 +40,9 @@ export const EntireModelsApi = {
         }).then((r) => r.data)
     },
 
+    likeModel(id: string, type: EntireType): Promise<ModelType> {
+        return AxiosInstance.patch(`/public/models/entire/${type.toUpperCase()}/${id}`).then((r) => r.data)
+    },
+
 }
 

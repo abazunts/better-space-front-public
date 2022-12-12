@@ -4,16 +4,29 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {App} from "./App";
 import {QueryClient, QueryClientProvider} from "react-query";
+import {GoogleOAuthProvider} from '@react-oauth/google';
+import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+})
 const Main = () => {
     return <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <App/>
-        </QueryClientProvider>
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <GoogleOAuthProvider
+                    clientId="64877129835-30ri2i7o12migbogk8amue6igb66r51e.apps.googleusercontent.com">
+                    <App/>
+                </GoogleOAuthProvider>
+            </QueryClientProvider>
+        </BrowserRouter>
     </React.StrictMode>
 }
 root.render(

@@ -5,25 +5,46 @@ import {ModelCard} from "../cards/Card";
 import {Pagination} from "@mui/material";
 import styles from './list.module.scss'
 import {LinearIndeterminate} from "../loaders/LinearProgress";
+import {useSearchParams} from "react-router-dom";
 
-
-export const ModelList: FC = () => {
+type PropsType = {
+    isLogin: boolean
+}
+export const ModelList: FC<PropsType> = ({isLogin}) => {
     const [type, setType] = useState(EntireType.SKIN)
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(50)
     const [pageCount, setPageCount] = useState(0)
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const changeCurrentPage = (page: number) => {
         setPage(page)
     }
+    const saveLocalStorage = (id: string) => {
+        localStorage.setItem(id, '1')
+    }
+    const handleLike = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+
+        EntireModelsApi.likeModel(id, type).then(() => {
+            saveLocalStorage(id)
+            refetch().then()
+        })
+
+    }
+
+    const handleMessage = (id: string) => {
+        alert('В разработке')
+    }
 
     const {
         isLoading,
-        isError,
-        error,
         data,
         isFetching,
-        isPreviousData,
+        refetch
     } = useQuery(['models', type, page, pageSize], async () => await EntireModelsApi.getModels(type, page, pageSize), {keepPreviousData: true})
 
     useEffect(() => {
@@ -33,12 +54,15 @@ export const ModelList: FC = () => {
 
     }, [data])
     return <div className={styles.listWrapper}>
-        {(isLoading || isFetching) && <LinearIndeterminate/> }
+        {(isLoading || isFetching) && <LinearIndeterminate/>}
         <div className={styles.List}>
             {data?.items.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
-                                                                                    type={type}/></div>)}
+                                                                                    type={type} handleLike={handleLike}
+                                                                                    handleMessage={handleMessage} isLogin={isLogin}/>
+            </div>)}
 
         </div>
-        {!isLoading && !isFetching&& <Pagination count={pageCount} page={page} onChange={(event, page) => changeCurrentPage(page)}/>}
+        {!isLoading && !isFetching &&
+            <Pagination count={pageCount} page={page} onChange={(event, page) => changeCurrentPage(page)}/>}
     </div>
 }

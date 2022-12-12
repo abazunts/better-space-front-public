@@ -1,0 +1,80 @@
+.authWrapper {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  font-family: Roboto,sans-serif;
+  color: #ffffff95;
+}
+.label {
+  font-size: 12px;
+  font-weight: 300;
+}
+input {
+  margin-bottom: 10px;
+}
+button {
+  margin: 10px 0;
+}
+.separator {
+  font-size: 12px;
+  font-family: Gadugi,sans-serif;
+  margin-bottom: 10px;
+}
+.separator_line {
+  flex: 1;
+  border-top: 1px solid #ffffff60;
+}
+.signButton {
+  width: 220px;
+  height: 50px;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  padding-left: 26px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  transition: 0.3s;
+  font-family: Gadugi,sans-serif;
+
+  span {
+    margin-left: 10px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #fff;
+  }
+}
+
+.signGoogle {
+  border: 1px solid #CE493C;
+  background-color: #CE493C;
+}
+.signFaceBook {
+  border: 1px solid #3D5B98;
+  background-color: #3D5B98;
+}
+.signApple {
+  border: 1px solid #000;
+  background-color: #000;
+}
+.registration {
+  font-family: Gadugi,sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(0, 255, 255, 0.8);
+  text-align: center;
+  transition: 0.3s;
+
+  &:hover {
+    cursor: pointer;
+    color: #f4c47b;
+  }
+}
