@@ -27,6 +27,7 @@ export const App: FC = () => {
         if (isLogin) {
             authMe().then(() => {
                 setIsLogin(isLogin)
+                setSearchParams('')
             }).catch(() => {
             })
         }
