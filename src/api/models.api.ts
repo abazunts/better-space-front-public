@@ -18,6 +18,7 @@ export enum ModelEnum {
 export enum EntireType {
     HUMAN = 'HUMAN',
     ANIMAL = 'ANIMAL',
+    SKIN = 'SKIN',
 }
 
 export type ModelType = {
@@ -26,6 +27,7 @@ export type ModelType = {
     server_timestamp: number,
     contact_info: string,
     owner_name: string,
+    promo_code?: string,
     modelId: string,
     isPrepared: boolean,
     _id: string,
@@ -33,6 +35,7 @@ export type ModelType = {
     entireType?: EntireType,
     parts?: string[]
     vox_model_data?: any
+    moderator?: string
 }
 
 export type PaginateType<I> = {

@@ -1,0 +1,41 @@
+.Creator {
+  font-weight: 700;
+}
+.Typography {
+  opacity: 0.3;
+
+  span {
+    font-size: 14px;
+    white-space:nowrap;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  .like {
+    background-color: #F862AA;
+    color: #000000;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 20px;
+      margin-right: 5px;
+    }
+  }
+  .help {
+    background-color: #D9D9D9;;
+    color: #000000;
+    font-weight: 700;
+
+    img {
+      width: 20px;
+      margin-right: 5px;
+    }
+  }
+  button {
+    margin: 3px;
+  }
+}

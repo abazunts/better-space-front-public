@@ -4,6 +4,7 @@ import {AxiosInstance} from "./axios.instance";
 export enum EntireType {
     HUMAN = 'HUMAN',
     ANIMAL = 'ANIMAL',
+    SKIN = 'SKIN',
 }
 
 export type ModelType = {
@@ -40,3 +41,4 @@ export const EntireModelsApi = {
     },
 
 }
+

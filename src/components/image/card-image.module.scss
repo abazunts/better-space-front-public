@@ -1,0 +1,30 @@
+.Wrapper {
+  position: relative;
+  //width: 200px;     // произвольная ширина контейнера
+  height: 190px;    // произвольная высота контейнера
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+  border: 1px solid gray;
+
+  img {
+    max-width: 100%;    // не обязательно
+    height: 100%;
+  }
+
+  .bottomRight {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 20px;
+      margin-right: 5px;
+    }
+    .likeCount {
+      font-weight: 700;
+    }
+  }
+}
