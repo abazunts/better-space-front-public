@@ -1,0 +1,21 @@
+.filterWrapper {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  div {
+    margin: 3px
+  }
+
+  button {
+    margin: 5px;
+  }
+
+}
