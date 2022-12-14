@@ -57,6 +57,9 @@ export const ModelList: FC<PropsType> = ({isLogin}) => {
     useEffect(() => {
         dispatch(setLoading({isLoading}))
     }, [isLoading])
+    useEffect(() => {
+        dispatch(setLoading({isLoading: isFetching}))
+    }, [isFetching])
 
     useEffect(() => {
         if (data) {

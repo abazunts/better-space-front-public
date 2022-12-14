@@ -23,12 +23,17 @@ export const Filter: FC<PropsType> = ({handleSearchCallback, initialFilterValues
     const filter = useSelector((state: RootState) => state.modelsReducer.filter)
     const {
         isLoading,
+        isFetching,
         data,
     } = useQuery(['models', filter], async () => await EntireModelsApi.getModels(EntireType.SKIN, 1, 50, filter.creator, filter.moderator, filter.promoter))
 
     useEffect(() => {
         dispatch(setLoading({isLoading}))
     }, [isLoading])
+
+    useEffect(() => {
+        dispatch(setLoading({isLoading: isFetching}))
+    }, [isFetching])
 
     useEffect(() => {
         if (data) {
