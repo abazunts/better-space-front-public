@@ -50,7 +50,6 @@ export const Filter: FC<PropsType> = ({handleSearchCallback, initialFilterValues
                 creator,
             }
         }))
-        handleSearchCallback && handleSearchCallback()
     }
 
     const handleClearFilter = () => {
