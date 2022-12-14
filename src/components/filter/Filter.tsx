@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import {EntireModelsApi, EntireType} from "../../api/entire-models.api";
 import {useQuery} from "react-query";
-import {FilterType, setFilter, setLoading, setModels, setPage} from "../../bll/models-slice";
+import {FilterType, setFilter, setLoading, setModels, setPage, setPageCount} from "../../bll/models-slice";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../bll/store";
 
@@ -37,6 +37,7 @@ export const Filter: FC<PropsType> = ({handleSearchCallback, initialFilterValues
 
     useEffect(() => {
         if (data) {
+            dispatch(setPageCount({pageCount: data.totalPages}))
             dispatch(setModels({models: data.items}))
         }
     }, [data])
