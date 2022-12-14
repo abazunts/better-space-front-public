@@ -24,7 +24,9 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
     const isExist =isLogin ? localStorage.getItem(item._id) : false
     return (
         <Card sx={{maxWidth: 240}}>
-            <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount}/>
+            <div className={styles.wrapperImage}>
+                <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount}/>
+            </div>
             <CardContent>
                 <Typography component="div" className={styles.Typography}>
                     <span>{modelId}</span>
