@@ -12,6 +12,7 @@ import {store} from "./bll/store";
 import {Provider, useDispatch} from "react-redux";
 import Button from "@mui/material/Button";
 import {setFilter, setPage} from "./bll/models-slice";
+import {SimpleBackdrop} from "./components/loaders/backdrop";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -55,6 +56,7 @@ const Main = () => {
 }
 root.render(
     <Provider store={store}>
+        <SimpleBackdrop/>
         <Main/>
     </Provider>
 );

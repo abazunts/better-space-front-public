@@ -72,7 +72,6 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     return <div className={styles.listWrapper}>
         <div className={styles.radioButtonWrapper}>
         </div>
-        {(isLoadingModels || isFetching) && <LinearIndeterminate/>}
         <div className={styles.List}>
             {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
                                                                                type={type} handleLike={handleLike}
