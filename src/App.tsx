@@ -5,6 +5,7 @@ import {ModelList} from "./components/items/ItemsList";
 import {GoogleAuthApi, UserEntity} from "./api/google-auth-api";
 import {useSearchParams} from "react-router-dom";
 import {AuthGoogleModal} from "./components/google/auth-modal";
+import {BasicTabs} from "./components/tabs/Tabs";
 
 
 export const App: FC = () => {
@@ -35,7 +36,8 @@ export const App: FC = () => {
     return (
         <GridLayout>
             {searchParams.get('login') && <AuthGoogleModal handleSuccessCallback={handleLogin}/>}
-            <ModelList isLogin={isLogin}/>
+            <BasicTabs isLogin={isLogin}/>
+            {/*<ModelList isLogin={isLogin}/>*/}
         </GridLayout>
     );
 }

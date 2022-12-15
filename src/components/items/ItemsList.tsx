@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from "react";
 import {EntireModelsApi, EntireType} from "../../api/entire-models.api";
 import {useQuery} from "react-query";
 import {ModelCard} from "../cards/Card";
-import {Pagination} from "@mui/material";
+import {FormControlLabel, Pagination, Radio, RadioGroup} from "@mui/material";
 import styles from './list.module.scss'
 import {LinearIndeterminate} from "../loaders/LinearProgress";
 import {useSearchParams} from "react-router-dom";
@@ -12,8 +12,9 @@ import {RootState} from "../../bll/store";
 
 type PropsType = {
     isLogin: boolean
+    sorting: number
 }
-export const ModelList: FC<PropsType> = ({isLogin}) => {
+export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     const dispatch = useDispatch()
     const [type, setType] = useState(EntireType.SKIN)
     const [searchParams, setSearchParams] = useSearchParams();
@@ -52,7 +53,7 @@ export const ModelList: FC<PropsType> = ({isLogin}) => {
         data,
         isFetching,
         refetch
-    } = useQuery(['models', type, page, pageSize], async () => await EntireModelsApi.getModels(type, page, pageSize, filter.creator, filter.moderator, filter.promoter), {keepPreviousData: true})
+    } = useQuery(['models', filter, type, page, pageSize, sorting], async () => await EntireModelsApi.getModels(type, page, pageSize, filter.creator, filter.moderator, filter.promoter, sorting), {keepPreviousData: true})
 
     useEffect(() => {
         dispatch(setLoading({isLoading}))
@@ -69,6 +70,8 @@ export const ModelList: FC<PropsType> = ({isLogin}) => {
 
     }, [data])
     return <div className={styles.listWrapper}>
+        <div className={styles.radioButtonWrapper}>
+        </div>
         {(isLoadingModels || isFetching) && <LinearIndeterminate/>}
         <div className={styles.List}>
             {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
