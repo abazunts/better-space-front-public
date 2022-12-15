@@ -10,6 +10,9 @@ import {EntireType} from "../../api/entire-models.api";
 import {CardImage} from "../image/CardImage";
 import LikeIcon from "../../assets/icons/like.png";
 import MessageIcon from "../../assets/icons/messenger.png";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../bll/store";
+import {setFilter} from "../../bll/models-slice";
 
 type PropsType = {
     item: ModelType
@@ -20,8 +23,36 @@ type PropsType = {
 }
 
 export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin}) => {
+    const dispatch = useDispatch()
+    const handleCreator = (creator: string) => {
+        dispatch(setFilter({
+            filter: {
+                promoter: '',
+                moderator: '',
+                creator,
+            }
+        }))
+    }
+    const handlePromoter = (promoter?: string) => {
+        promoter && dispatch(setFilter({
+            filter: {
+                promoter: promoter || '',
+                moderator: '',
+                creator: '',
+            }
+        }))
+    }
+    const handleModerator = (moderator?: string) => {
+        moderator && dispatch(setFilter({
+            filter: {
+                promoter: '',
+                moderator: moderator || '',
+                creator: '',
+            }
+        }))
+    }
     const modelId = type.toUpperCase() + item.modelId
-    const isExist =isLogin ? localStorage.getItem(item._id) : false
+    const isExist = isLogin ? localStorage.getItem(item._id) : false
     return (
         <Card sx={{maxWidth: 240}}>
             <div className={styles.wrapperImage}>
@@ -33,19 +64,24 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     <div>
-                        <span className={styles.Creator}>Creator: {item.owner_name}</span>
+                        <span className={styles.Creator}>Creator: <span className={styles.linkFilter}
+                                                                        onClick={() => handleCreator(item.owner_name)}>{item.owner_name}</span></span>
                     </div>
                     <div>
-                        Promoter: {item.promo_code}
+                        Promoter: <span className={styles.linkFilter}
+                                        onClick={() => handlePromoter(item.promo_code)}>{item.promo_code}</span>
                     </div>
                     <div>
-                        Moderator: {item.moderator}
+                        Moderator: <span className={styles.linkFilter}
+                                         onClick={() => handleModerator(item.moderator)}>{item.moderator}</span>
                     </div>
                 </Typography>
             </CardContent>
             <div className={styles.actions}>
-                <Button size="small" variant={'contained'} disabled={!!isExist} onClick={() => handleLike(item._id)} className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleMessage(item._id)} className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
+                <Button size="small" variant={'contained'} disabled={!!isExist} onClick={() => handleLike(item._id)}
+                        className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
+                <Button size="small" variant={'contained'} onClick={() => handleMessage(item._id)}
+                        className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
             </div>
         </Card>
     );

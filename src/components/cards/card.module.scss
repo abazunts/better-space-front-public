@@ -8,6 +8,8 @@
     font-size: 14px;
     white-space:nowrap;
   }
+
+
 }
 
 .actions {
@@ -43,4 +45,12 @@
 .wrapperImage {
   display: flex;
   justify-content: center;
+}
+
+.linkFilter {
+  cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
 }
