@@ -29,7 +29,7 @@ type PropsType = {
     isLogin: boolean
 }
 
-export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin}) => {
+export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin, handleApprove, handleReject}) => {
     const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.authReducer.user)
     const handleCreator = (creator: string) => {
@@ -99,9 +99,9 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                         className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleLike(item._id)}
+                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(item._id)}
                         className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleMessage(item._id)}
+                <Button size="small" variant={'contained'} onClick={() => handleReject(item._id)}
                         className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
             </div>}
         </Card>
