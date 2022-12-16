@@ -2,9 +2,8 @@ import {FC, useEffect, useState} from "react";
 import {EntireModelsApi, EntireType} from "../../api/entire-models.api";
 import {useQuery} from "react-query";
 import {ModelCard} from "../cards/Card";
-import {FormControlLabel, Pagination, Radio, RadioGroup} from "@mui/material";
+import {Pagination} from "@mui/material";
 import styles from './list.module.scss'
-import {LinearIndeterminate} from "../loaders/LinearProgress";
 import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setLoading, setModels, setPage, setPageCount, setTotalCount} from "../../bll/models-slice";
@@ -48,6 +47,29 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
         alert('В разработке')
     }
 
+    const handleApprove = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+
+        type && EntireModelsApi.approveModel(id, type).then(() => {
+            refetch().then()
+        })
+
+    }
+
+    const handleReject = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+
+        type && EntireModelsApi.rejectModel(id, type).then(() => {
+            refetch().then()
+        })
+    }
+
     const {
         isLoading,
         data,
@@ -75,7 +97,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
                                                                                type={type} handleLike={handleLike}
                                                                                handleMessage={handleMessage}
-                                                                               isLogin={isLogin}/>
+                                                                               isLogin={isLogin} handleApprove={handleApprove} handleReject={handleReject}/>
             </div>)}
 
         </div>

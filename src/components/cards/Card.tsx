@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {ModelType} from "../../api/models.api";
 import styles from "./card.module.scss"
-import {EntireModelType, EntireType} from "../../api/entire-models.api";
+import {EntireModelsApi, EntireModelType, EntireType} from "../../api/entire-models.api";
 import {CardImage} from "../image/CardImage";
 import LikeIcon from "../../assets/icons/like.png";
 import ApproveIcon from '../../assets/icons/approve.png'
@@ -24,6 +24,8 @@ type PropsType = {
     type: EntireType
     handleLike: (id: string) => void
     handleMessage: (id: string) => void
+    handleApprove: (id: string) => void
+    handleReject: (id: string) => void
     isLogin: boolean
 }
 
@@ -68,7 +70,7 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
         <Card sx={{maxWidth: 240}}>
             <NavLink to={Routers.models.model.getUrl(type, item._id)}>
                 <div className={styles.wrapperImage}>
-                    <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount}/>
+                    <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount} approvedCount={item.approvedCount} rejectedCount={item.rejectedCount}/>
                 </div>
             </NavLink>
             <CardContent>
