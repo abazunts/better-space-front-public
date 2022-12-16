@@ -33,6 +33,7 @@ const Main = () => {
                     <Routes>
                         <Route path={Routers.models.model.path} element={ <CurrentModel/>}/>
                         <Route path={Routers.models.list.path} element={ <MainPage/>}/>
+                        <Route path="/" element={<MainPage/>}/>
                     </Routes>
 
                 </GoogleOAuthProvider>
