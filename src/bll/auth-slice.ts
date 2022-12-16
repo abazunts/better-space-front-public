@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {RolesEnum, UserEntity, UserStatusEnum} from "../api/google-auth-api";
+import {UserEntity} from "../api/google-auth-api";
 
 
 export interface AuthState {
@@ -9,15 +9,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
     isLogin: false,
-    user: {
-        _id: '635d1b2f681666b639deb95e',
-        approved: [],
-        rejected: [],
-        like: [],
-        email: '',
-        roles: [RolesEnum.Admin],
-        status: UserStatusEnum.Active
-    }
+    user: null
 
 }
 
