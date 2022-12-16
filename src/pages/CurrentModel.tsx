@@ -187,8 +187,8 @@ export const CurrentModel = () => {
             {isActiveUserSection && (queryApprovedUsers.data?.length ||queryRejectedUsers.data?.length) && <Paper className={styles.Users}>
                 <h3>Users</h3>
                 <div className={styles.wrapperUsers}>
-                    {queryApprovedUsers.data?.map((user)=> <div className={styles.user}><img alt={''} src={ApproveIcon} className={styles.approvedIcon}/>Email: {user.email}</div>)}
-                    {queryRejectedUsers.data?.map((user)=> <div className={styles.user}><img alt={''} src={RejectIcon} className={styles.rejectedIcon}/>Email: {user.email}</div>)}
+                    {approvedUsers.map((user)=> <div className={styles.user}><img alt={''} src={ApproveIcon} className={styles.approvedIcon}/>Email: {user.email}</div>)}
+                    {rejectedUsers.map((user)=> <div className={styles.user}><img alt={''} src={RejectIcon} className={styles.rejectedIcon}/>Email: {user.email}</div>)}
                 </div>
             </Paper>}
         </Box>

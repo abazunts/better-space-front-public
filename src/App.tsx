@@ -16,7 +16,6 @@ export const App: FC = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useDispatch()
 
-    const user = useSelector((state: RootState) => state.authReducer.user)
     const isLogin = useSelector((state: RootState) => state.authReducer.isLogin)
 
     const authMe = async () => {
@@ -24,12 +23,6 @@ export const App: FC = () => {
         dispatch(setUser({user}))
         dispatch(setIsLogin({isLogin: true}))
     }
-
-    useEffect(() => {
-        authMe().then(() => {
-        }).catch(() => {
-        })
-    }, [])
     const handleLogin = (isLogin: boolean) => {
         if (isLogin) {
             authMe().then(() => {

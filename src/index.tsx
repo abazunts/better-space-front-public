@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -6,12 +6,14 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import {BrowserRouter} from "react-router-dom";
 import {store} from "./bll/store";
-import {Provider} from "react-redux";
+import {Provider, useDispatch} from "react-redux";
 import {SimpleBackdrop} from "./components/loaders/backdrop";
 import {MainPage} from "./pages/MainPage";
 import {Route, Routes} from 'react-router-dom'
 import {CurrentModel} from "./pages/CurrentModel";
 import {Routers} from "./routing/linking";
+import {GoogleAuthApi} from "./api/google-auth-api";
+import {setIsLogin, setUser} from "./bll/auth-slice";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -24,6 +26,16 @@ export const queryClient = new QueryClient({
     },
 })
 const Main = () => {
+    const dispatch = useDispatch()
+    const authMe = async () => {
+        const user = await GoogleAuthApi.me()
+        dispatch(setUser({user}))
+        dispatch(setIsLogin({isLogin: true}))
+    }
+
+    useEffect(() => {
+        authMe()
+    }, [])
 
     return <React.StrictMode>
         <BrowserRouter>
