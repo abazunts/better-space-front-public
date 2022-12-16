@@ -75,7 +75,7 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.likeModel(id, type).then(() => {
             refetch().then()
         })
@@ -91,7 +91,7 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.approveModel(id, type).then(() => {
             refetch().then()
         })
@@ -103,7 +103,7 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.rejectModel(id, type).then(() => {
             refetch().then()
         })

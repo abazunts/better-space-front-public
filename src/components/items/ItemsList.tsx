@@ -28,17 +28,13 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     const changeCurrentPage = (page: number) => {
         dispatch(setPage({page}))
     }
-    const saveLocalStorage = (id: string) => {
-        localStorage.setItem(id, '1')
-    }
     const handleLike = (id: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         EntireModelsApi.likeModel(id, type).then(() => {
-            saveLocalStorage(id)
             refetch().then()
         })
 
@@ -53,7 +49,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.approveModel(id, type).then(() => {
             refetch().then()
         })
@@ -65,7 +61,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setIsLogin({isLogin: true}))
+        dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.rejectModel(id, type).then(() => {
             refetch().then()
         })
