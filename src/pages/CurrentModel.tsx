@@ -4,7 +4,7 @@ import {RootState} from "../bll/store";
 import {useEffect} from "react";
 import {useQuery} from "react-query";
 import {EntireModelsApi, EntireType} from "../api/entire-models.api";
-import {setCurrentModel, setFilter, setLoading} from "../bll/models-slice";
+import {setApprovedUsers, setCurrentModel, setFilter, setLoading, setRejectedUsers} from "../bll/models-slice";
 import Box from "@mui/material/Box";
 import {Paper} from "@mui/material";
 import styles from './current-model.module.scss'
@@ -42,9 +42,12 @@ export const CurrentModel = () => {
     const queryRejectedUsers = useQuery(['rejectedUsers', rejectedUserIds], async () => await EntireModelsApi.getUsers(rejectedUserIds), {keepPreviousData: true})
 
     useEffect(() => {
+        dispatch(setApprovedUsers({users: queryApprovedUsers.data || []}))
+    }, [queryApprovedUsers])
 
-
-    }, [currentModel])
+    useEffect(() => {
+        dispatch(setRejectedUsers({users: queryRejectedUsers.data || []}))
+    }, [queryRejectedUsers])
 
     const {
         isLoading,
