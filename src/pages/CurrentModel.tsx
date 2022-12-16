@@ -1,14 +1,14 @@
 import {useParams, useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../bll/store";
+import * as React from "react";
 import {useEffect} from "react";
 import {useQuery} from "react-query";
 import {EntireModelsApi, EntireType} from "../api/entire-models.api";
-import {setApprovedUsers, setCurrentModel, setFilter, setLoading, setRejectedUsers} from "../bll/models-slice";
+import {setApprovedUsers, setCurrentModel, setLoading, setRejectedUsers} from "../bll/models-slice";
 import Box from "@mui/material/Box";
 import {Paper} from "@mui/material";
 import styles from './current-model.module.scss'
-import * as React from "react";
 import {SimpleBackdrop} from "../components/loaders/backdrop";
 import {CardImageCurrentModel} from "../components/image/CardImageCurrentModel";
 import CardContent from "@mui/material/CardContent";
@@ -42,11 +42,11 @@ export const CurrentModel = () => {
     const queryRejectedUsers = useQuery(['rejectedUsers', rejectedUserIds], async () => await EntireModelsApi.getUsers(rejectedUserIds), {keepPreviousData: true})
 
     useEffect(() => {
-        dispatch(setApprovedUsers({users: queryApprovedUsers.data || []}))
+        queryApprovedUsers?.data && dispatch(setApprovedUsers({users: queryApprovedUsers.data}))
     }, [queryApprovedUsers])
 
     useEffect(() => {
-        dispatch(setRejectedUsers({users: queryRejectedUsers.data || []}))
+        queryRejectedUsers?.data  && dispatch(setRejectedUsers({users: queryRejectedUsers.data}))
     }, [queryRejectedUsers])
 
     const {
@@ -108,13 +108,6 @@ export const CurrentModel = () => {
             refetch().then()
         })
     }
-
-    if (!currentModel) {
-        return <SimpleBackdrop/>
-    }
-
-    const createdDate = new Date(currentModel.server_timestamp).toLocaleDateString()
-    const createdTime = new Date(currentModel.server_timestamp).toLocaleTimeString()
     const authMe = async () => {
         const user = await GoogleAuthApi.me()
         dispatch(setUser({user}))
@@ -129,10 +122,18 @@ export const CurrentModel = () => {
             })
         }
     }
+    if (!currentModel) {
+        return <SimpleBackdrop/>
+    }
+    console.log(currentModel)
 
-    const isApprovedDisabled = !!currentModel.approvedEntities.find((a) => a.user === user?._id)
-    const isRejectedDisabled = !!currentModel.rejectedEntities.find((a) => a.user === user?._id)
-    const isLikeDisabled = !!currentModel.likeEntities.find((a) => a.user === user?._id)
+    const createdDate = currentModel.server_timestamp && new Date(currentModel.server_timestamp).toLocaleDateString()
+    const createdTime = currentModel.server_timestamp && new Date(currentModel.server_timestamp).toLocaleTimeString()
+
+
+    const isApprovedDisabled = !!currentModel?.approvedEntities?.find((a) => a.user === user?._id)
+    const isRejectedDisabled = !!currentModel?.rejectedEntities?.find((a) => a.user === user?._id)
+    const isLikeDisabled = !!currentModel?.likeEntities?.find((a) => a.user === user?._id)
     return <div className={styles.wrapper}>
         {searchParams.get('login') && <AuthGoogleModal handleSuccessCallback={handleLogin}/>}
         <Box
