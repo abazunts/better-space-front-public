@@ -8,6 +8,7 @@ import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setLoading, setModels, setPage, setPageCount, setTotalCount} from "../../bll/models-slice";
 import {RootState} from "../../bll/store";
+import {setIsLogin} from "../../bll/auth-slice";
 
 type PropsType = {
     isLogin: boolean
@@ -35,7 +36,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-
+        dispatch(setIsLogin({isLogin: true}))
         EntireModelsApi.likeModel(id, type).then(() => {
             saveLocalStorage(id)
             refetch().then()
@@ -52,7 +53,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-
+        dispatch(setIsLogin({isLogin: true}))
         type && EntireModelsApi.approveModel(id, type).then(() => {
             refetch().then()
         })
@@ -64,7 +65,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-
+        dispatch(setIsLogin({isLogin: true}))
         type && EntireModelsApi.rejectModel(id, type).then(() => {
             refetch().then()
         })
