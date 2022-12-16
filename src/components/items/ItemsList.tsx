@@ -7,7 +7,7 @@ import styles from './list.module.scss'
 import {LinearIndeterminate} from "../loaders/LinearProgress";
 import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {setLoading, setModels, setPage, setPageCount} from "../../bll/models-slice";
+import {setLoading, setModels, setPage, setPageCount, setTotalCount} from "../../bll/models-slice";
 import {RootState} from "../../bll/store";
 
 type PropsType = {
@@ -65,13 +65,12 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     useEffect(() => {
         if (data) {
             dispatch(setPageCount({pageCount: data.totalPages}))
+            dispatch(setTotalCount({totalCount: data.totalCount}))
             dispatch(setModels({models: data.items}))
         }
 
     }, [data])
     return <div className={styles.listWrapper}>
-        <div className={styles.radioButtonWrapper}>
-        </div>
         <div className={styles.List}>
             {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
                                                                                type={type} handleLike={handleLike}

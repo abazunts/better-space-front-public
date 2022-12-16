@@ -16,6 +16,10 @@ export type UserEntity = {
     email: string;
     roles: RolesEnum[];
     status: UserStatusEnum;
+    _id: string;
+    approved: string[];
+    rejected: string[];
+    like: string[];
 }
 
 export type LoginResponse = {

@@ -1,11 +1,16 @@
 .Wrapper {
   position: relative;
-  width: 200px;     // произвольная ширина контейнера
-  height: 200px;    // произвольная высота контейнера
+  width: 380px;     // произвольная ширина контейнера
+  height: 380px;    // произвольная высота контейнера
   display: flex;
   justify-content: center;
   margin: 5px;
   border: 1px solid gray;
+
+  @media (max-width: 767px) {
+    width: 330px;     // произвольная ширина контейнера
+    height: 330px;
+  }
 
   img {
     max-width: 100%;    // не обязательно
@@ -53,3 +58,4 @@
     }
   }
 }
+

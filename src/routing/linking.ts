@@ -62,3 +62,24 @@ export const LinkingStruct = [
         title: ModelEnum['16x']
     }
 ]
+
+export const LinkingSkin = [
+    {
+        link: '/' + EntireType.SKIN,
+        title: EntireType.SKIN
+    },
+]
+
+export const Routers = {
+    models: {
+        list: {
+            path: '/:type',
+        },
+        model: {
+            path: '/:type/:id',
+            getUrl(type: EntireType, id: string) {
+                return `/${type}/${id}`;
+            },
+        },
+    },
+}

@@ -5,6 +5,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {ModelList} from "../items/ItemsList";
 import {FC} from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "../../bll/store";
+import styles from "../items/list.module.scss";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -50,11 +53,13 @@ export const BasicTabs: FC<PropsType> = ({isLogin}) => {
 
     return (
         <Box sx={{ width: '100%' }}>
+
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="NEW" {...a11yProps(0)} />
-                    <Tab label="TOP" {...a11yProps(1)} />
+                    <Tab label="TOP" {...a11yProps(0)} />
+                    <Tab label="NEW" {...a11yProps(1)} />
                 </Tabs>
+
             </Box>
             <TabPanel value={value} index={0}>
                 <ModelList isLogin={isLogin} sorting={value}/>
@@ -62,6 +67,7 @@ export const BasicTabs: FC<PropsType> = ({isLogin}) => {
             <TabPanel value={value} index={1}>
                 <ModelList isLogin={isLogin}  sorting={value}/>
             </TabPanel>
+
         </Box>
     );
 }

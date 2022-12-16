@@ -1,18 +1,31 @@
 .wrapper {
- display: flex;
+  display: flex;
   flex-direction: column;
   align-items: end;
 
- .wrapperFilter {
-  margin-right: 20px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  button {
-   margin-right: 5px;
+  .wrapperTopBlock {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    .totalCount {
+      margin-left: 10px;
+      font-weight: 700;
+    }
   }
 
- }
+  .wrapperFilter {
+    margin-right: 20px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+
+    button {
+      margin-right: 5px;
+    }
+
+  }
 }
