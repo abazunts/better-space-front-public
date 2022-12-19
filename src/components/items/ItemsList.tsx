@@ -2,13 +2,13 @@ import {FC, useEffect, useState} from "react";
 import {EntireModelsApi, EntireType} from "../../api/entire-models.api";
 import {useQuery} from "react-query";
 import {ModelCard} from "../cards/Card";
-import {FormControlLabel, Pagination, Radio, RadioGroup} from "@mui/material";
+import {Pagination} from "@mui/material";
 import styles from './list.module.scss'
-import {LinearIndeterminate} from "../loaders/LinearProgress";
 import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {setLoading, setModels, setPage, setPageCount} from "../../bll/models-slice";
+import {setLoading, setModels, setPage, setPageCount, setTotalCount} from "../../bll/models-slice";
 import {RootState} from "../../bll/store";
+import {setIsLogin} from "../../bll/auth-slice";
 
 type PropsType = {
     isLogin: boolean
@@ -28,17 +28,13 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     const changeCurrentPage = (page: number) => {
         dispatch(setPage({page}))
     }
-    const saveLocalStorage = (id: string) => {
-        localStorage.setItem(id, '1')
-    }
     const handleLike = (id: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
             return
         }
-
+        dispatch(setLoading({isLoading: true}))
         EntireModelsApi.likeModel(id, type).then(() => {
-            saveLocalStorage(id)
             refetch().then()
         })
 
@@ -46,6 +42,29 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
 
     const handleMessage = (id: string) => {
         alert('В разработке')
+    }
+
+    const handleApprove = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+        dispatch(setLoading({isLoading: true}))
+        type && EntireModelsApi.approveModel(id, type).then(() => {
+            refetch().then()
+        })
+
+    }
+
+    const handleReject = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+        dispatch(setLoading({isLoading: true}))
+        type && EntireModelsApi.rejectModel(id, type).then(() => {
+            refetch().then()
+        })
     }
 
     const {
@@ -65,18 +84,17 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     useEffect(() => {
         if (data) {
             dispatch(setPageCount({pageCount: data.totalPages}))
+            dispatch(setTotalCount({totalCount: data.totalCount}))
             dispatch(setModels({models: data.items}))
         }
 
     }, [data])
     return <div className={styles.listWrapper}>
-        <div className={styles.radioButtonWrapper}>
-        </div>
         <div className={styles.List}>
             {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
                                                                                type={type} handleLike={handleLike}
                                                                                handleMessage={handleMessage}
-                                                                               isLogin={isLogin}/>
+                                                                               isLogin={isLogin} handleApprove={handleApprove} handleReject={handleReject}/>
             </div>)}
 
         </div>

@@ -6,24 +6,32 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {ModelType} from "../../api/models.api";
 import styles from "./card.module.scss"
-import {EntireType} from "../../api/entire-models.api";
+import {EntireModelsApi, EntireModelType, EntireType} from "../../api/entire-models.api";
 import {CardImage} from "../image/CardImage";
 import LikeIcon from "../../assets/icons/like.png";
+import ApproveIcon from '../../assets/icons/approve.png'
+import RejectIcon from '../../assets/icons/reject.png'
 import MessageIcon from "../../assets/icons/messenger.png";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../bll/store";
 import {setFilter} from "../../bll/models-slice";
+import {NavLink} from "react-router-dom";
+import {Routers} from "../../routing/linking";
+import {RootState} from "../../bll/store";
+import {RolesEnum} from "../../api/google-auth-api";
 
 type PropsType = {
-    item: ModelType
+    item: EntireModelType
     type: EntireType
     handleLike: (id: string) => void
     handleMessage: (id: string) => void
+    handleApprove: (id: string) => void
+    handleReject: (id: string) => void
     isLogin: boolean
 }
 
-export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin}) => {
+export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin, handleApprove, handleReject}) => {
     const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.authReducer.user)
     const handleCreator = (creator: string) => {
         dispatch(setFilter({
             filter: {
@@ -51,13 +59,20 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
             }
         }))
     }
+
     const modelId = type.toUpperCase() + item.modelId
-    const isExist = isLogin ? localStorage.getItem(item._id) : false
+    const isApprovedDisabled = !!item.approvedEntities.find((a) => a.user === user?._id)
+    const isRejectedDisabled = !!item.rejectedEntities.find((a) => a.user === user?._id)
+    const isLikeDisabled = !!item.likeEntities.find((a) => a.user === user?._id)
+
+    const isActiveModeratorActions = user ? user?.roles.indexOf(RolesEnum.Moderator) > -1 || user?.roles.indexOf(RolesEnum.Admin) > -1 : false
     return (
         <Card sx={{maxWidth: 240}}>
-            <div className={styles.wrapperImage}>
-                <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount}/>
-            </div>
+            <NavLink to={Routers.models.model.getUrl(type, item._id)}>
+                <div className={styles.wrapperImage}>
+                    <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount} approvedCount={item.approvedCount} rejectedCount={item.rejectedCount}/>
+                </div>
+            </NavLink>
             <CardContent>
                 <Typography component="div" className={styles.Typography}>
                     <span>{modelId}</span>
@@ -78,11 +93,17 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 </Typography>
             </CardContent>
             <div className={styles.actions}>
-                <Button size="small" variant={'contained'} disabled={!!isExist} onClick={() => handleLike(item._id)}
+                <Button size="small" variant={'contained'} disabled={isLikeDisabled} onClick={() => handleLike(item._id)}
                         className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
                 <Button size="small" variant={'contained'} onClick={() => handleMessage(item._id)}
                         className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
             </div>
+            {isActiveModeratorActions && <div className={styles.moderatorActions}>
+                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(item._id)}
+                        className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
+                <Button size="small" variant={'contained'} onClick={() => handleReject(item._id)}
+                        className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
+            </div>}
         </Card>
     );
 }

@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {ModelType} from "../api/entire-models.api";
+import {EntireModelType} from "../api/entire-models.api";
+import {UserEntity} from "../api/google-auth-api";
 
 export type FilterType = {
     creator: string
@@ -8,16 +9,21 @@ export type FilterType = {
 }
 
 export interface CounterState {
-    models: ModelType[]
+    models: EntireModelType[]
+    currentModel: EntireModelType | null
     isLoading: boolean
     page: number
     pageSize: number
     pageCount: number
     filter: FilterType
+    totalCount: number
+    approvedUsers: UserEntity[]
+    rejectedUsers: UserEntity[]
 }
 
 const initialState: CounterState = {
     models: [],
+    currentModel: null,
     isLoading: false,
     page: 1,
     pageSize: 50,
@@ -26,7 +32,10 @@ const initialState: CounterState = {
         creator: '',
         promoter: '',
         moderator: ''
-    }
+    },
+    totalCount: 0,
+    approvedUsers: [],
+    rejectedUsers: []
 
 }
 
@@ -34,7 +43,7 @@ export const modelsSlice = createSlice({
     name: 'models',
     initialState,
     reducers: {
-        setModels: (state, action: PayloadAction<{ models: ModelType[] }>) => {
+        setModels: (state, action: PayloadAction<{ models: EntireModelType[] }>) => {
             state.models = action.payload.models
         },
         setLoading: (state, action: PayloadAction<{ isLoading: boolean }>) => {
@@ -49,10 +58,22 @@ export const modelsSlice = createSlice({
         setFilter: (state, action: PayloadAction<{ filter: FilterType }>) => {
             state.filter = action.payload.filter
         },
+        setTotalCount: (state, action: PayloadAction<{ totalCount: number }>) => {
+            state.totalCount = action.payload.totalCount
+        },
+        setCurrentModel: (state, action: PayloadAction<{ currentModel: EntireModelType }>) => {
+            state.currentModel = action.payload.currentModel
+        },
+        setApprovedUsers: (state, action: PayloadAction<{ users: UserEntity[] }>) => {
+            state.approvedUsers = action.payload.users
+        },
+        setRejectedUsers: (state, action: PayloadAction<{ users: UserEntity[] }>) => {
+            state.rejectedUsers = action.payload.users
+        },
     },
 
 })
 
-export const {setModels, setLoading, setPage, setPageCount, setFilter} = modelsSlice.actions
+export const {setModels, setLoading, setPage, setPageCount, setFilter, setTotalCount, setCurrentModel, setApprovedUsers, setRejectedUsers} = modelsSlice.actions
 
 export const modelsReducer = modelsSlice.reducer

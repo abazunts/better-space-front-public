@@ -6,28 +6,27 @@ import {GoogleAuthApi, UserEntity} from "./api/google-auth-api";
 import {useSearchParams} from "react-router-dom";
 import {AuthGoogleModal} from "./components/google/auth-modal";
 import {BasicTabs} from "./components/tabs/Tabs";
+import styles from "./components/items/list.module.scss";
+import {useDispatch, useSelector} from "react-redux";
+import {setIsLogin, setUser} from "./bll/auth-slice";
+import {RootState} from "./bll/store";
 
 
 export const App: FC = () => {
-    const [isLogin, setIsLogin] = useState(false)
-    const [user, setUser] = useState<null | UserEntity>(null)
     let [searchParams, setSearchParams] = useSearchParams();
+    const dispatch = useDispatch()
+
+    const isLogin = useSelector((state: RootState) => state.authReducer.isLogin)
 
     const authMe = async () => {
         const user = await GoogleAuthApi.me()
-        setUser(user)
-        setIsLogin(true)
+        dispatch(setUser({user}))
+        dispatch(setIsLogin({isLogin: true}))
     }
-
-    useEffect(() => {
-        authMe().then(() => {
-        }).catch(() => {
-        })
-    }, [])
     const handleLogin = (isLogin: boolean) => {
         if (isLogin) {
             authMe().then(() => {
-                setIsLogin(isLogin)
+                dispatch(setIsLogin({isLogin: true}))
                 setSearchParams('')
             }).catch(() => {
             })
