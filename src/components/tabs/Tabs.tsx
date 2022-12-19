@@ -58,6 +58,8 @@ export const BasicTabs: FC<PropsType> = ({isLogin}) => {
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="TOP" {...a11yProps(0)} />
                     <Tab label="NEW" {...a11yProps(1)} />
+                    <Tab label="APPROVED" {...a11yProps(2)} />
+                    <Tab label="REJECTED" {...a11yProps(3)} />
                 </Tabs>
 
             </Box>
@@ -67,7 +69,12 @@ export const BasicTabs: FC<PropsType> = ({isLogin}) => {
             <TabPanel value={value} index={1}>
                 <ModelList isLogin={isLogin}  sorting={value}/>
             </TabPanel>
-
+            <TabPanel value={value} index={2}>
+                <ModelList isLogin={isLogin}  sorting={value}/>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <ModelList isLogin={isLogin}  sorting={value}/>
+            </TabPanel>
         </Box>
     );
 }
