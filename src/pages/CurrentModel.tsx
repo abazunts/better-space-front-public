@@ -22,8 +22,20 @@ import {GoogleAuthApi, RolesEnum} from "../api/google-auth-api";
 import ApproveIcon from "../assets/icons/approve.png";
 import RejectIcon from "../assets/icons/reject.png";
 
+export const getType = (modelId: string | undefined): EntireType | null => {
+    if (!modelId) return null
+    const arr = modelId.split('-');
+    return arr[0] as EntireType;
+};
+
+export const getModelId = (modelId: string | undefined, type: EntireType | null): string | null => {
+    if (!modelId || !type) return null
+    const pattern = `${type.toUpperCase()}`;
+    return modelId.replace(new RegExp(pattern), '');
+};
+
 export const CurrentModel = () => {
-    let params = useParams<{ type: EntireType, id: string }>();
+    let params = useParams<{ modelId: string }>();
     const dispatch = useDispatch()
     const currentModel = useSelector((state: RootState) => state.modelsReducer.currentModel)
     const approvedUsers = useSelector((state: RootState) => state.modelsReducer.approvedUsers)
@@ -32,8 +44,9 @@ export const CurrentModel = () => {
     const user = useSelector((state: RootState) => state.authReducer.user)
     const isActiveModeratorActions = user ? user?.roles.indexOf(RolesEnum.Moderator) > -1 || user?.roles.indexOf(RolesEnum.Admin) > -1 : false
     const isActiveUserSection = user ? user?.roles.indexOf(RolesEnum.Admin) > -1 : false
-    const id = params.id || null
-    const type = params.type || null
+    const type = getType(params.modelId)
+    const id = getModelId(params.modelId, type)
+
 
     const approvedUserIds = currentModel?.approvedEntities.map((a) => a.user) || []
     const rejectedUserIds = currentModel?.rejectedEntities.map((a) => a.user) || []
@@ -46,7 +59,7 @@ export const CurrentModel = () => {
     }, [queryApprovedUsers])
 
     useEffect(() => {
-        queryRejectedUsers?.data  && dispatch(setRejectedUsers({users: queryRejectedUsers.data}))
+        queryRejectedUsers?.data && dispatch(setRejectedUsers({users: queryRejectedUsers.data}))
     }, [queryRejectedUsers])
 
     const {
@@ -54,7 +67,7 @@ export const CurrentModel = () => {
         data,
         isFetching,
         refetch
-    } = useQuery(['currentModel', id], async () => await EntireModelsApi.getModelById(id, type), {keepPreviousData: true})
+    } = useQuery(['currentModel', params.modelId], async () => await EntireModelsApi.getModelById(params.modelId, type), {keepPreviousData: true})
 
     useEffect(() => {
         dispatch(setLoading({isLoading}))
@@ -76,7 +89,7 @@ export const CurrentModel = () => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        type && EntireModelsApi.likeModel(id, type).then(() => {
+        type && EntireModelsApi.likeModel(id).then(() => {
             refetch().then()
         })
 
@@ -92,7 +105,7 @@ export const CurrentModel = () => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        type && EntireModelsApi.approveModel(id, type).then(() => {
+        type && EntireModelsApi.approveModel(id).then(() => {
             refetch().then()
         })
 
@@ -104,7 +117,7 @@ export const CurrentModel = () => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        type && EntireModelsApi.rejectModel(id, type).then(() => {
+        type && EntireModelsApi.rejectModel(id).then(() => {
             refetch().then()
         })
     }
@@ -131,9 +144,9 @@ export const CurrentModel = () => {
     const createdTime = currentModel.server_timestamp && new Date(currentModel.server_timestamp).toLocaleTimeString()
 
 
-    const isApprovedDisabled = !!currentModel?.approvedEntities?.find((a) => a.user === user?._id)
-    const isRejectedDisabled = !!currentModel?.rejectedEntities?.find((a) => a.user === user?._id)
-    const isLikeDisabled = !!currentModel?.likeEntities?.find((a) => a.user === user?._id)
+    const isApprovedDisabled = !user ? false : !!currentModel?.approvedEntities?.find((a) => a.user === user?._id)
+    const isRejectedDisabled = !user ? false : !!currentModel?.rejectedEntities?.find((a) => a.user === user?._id)
+    const isLikeDisabled = !user ? false : !!currentModel?.likeEntities?.find((a) => a.user === user?._id)
     return <div className={styles.wrapper}>
         {searchParams.get('login') && <AuthGoogleModal handleSuccessCallback={handleLogin}/>}
         <Box
@@ -147,8 +160,10 @@ export const CurrentModel = () => {
         >
             <Paper elevation={3}>
                 <div className={styles.wrapperImage}>
-                    <CardImageCurrentModel preview_base64={currentModel.preview_base64} approvedCount={currentModel.approvedCount}
-                                           likeCount={currentModel.likeCount} rejectedCount={currentModel.rejectedCount}/>
+                    <CardImageCurrentModel preview_base64={currentModel.preview_base64}
+                                           approvedCount={currentModel.approvedCount}
+                                           likeCount={currentModel.likeCount}
+                                           rejectedCount={currentModel.rejectedCount}/>
                 </div>
                 <div className={styles.date}>
                     <span className={styles.linkFilter}>{createdDate} {createdTime}</span>
@@ -169,32 +184,40 @@ export const CurrentModel = () => {
                             Moderator: <span className={styles.linkFilter}>{currentModel.moderator}</span>
                         </div>
                         <div className={styles.partsWrapper}>
-                           <span>PARTS: </span> <div className={styles.linkFilter}>{currentModel.parts?.map((p)=> <div className={styles.parts}>{p}</div>)}</div>
+                            <span>PARTS: </span>
+                            <div className={styles.linkFilter}>{currentModel.parts?.map((p) => <div
+                                className={styles.parts}>{p}</div>)}</div>
                         </div>
 
                     </Typography>
                 </CardContent>
                 <div className={styles.actions}>
                     <Button size="small" variant={'contained'} disabled={isLikeDisabled}
-                            onClick={() => handleLike(currentModel._id)}
+                            onClick={() => handleLike(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
-                    <Button size="small" variant={'contained'} onClick={() => handleMessage(currentModel._id)}
+                    <Button size="small" variant={'contained'} onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
                 </div>
                 {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                    <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(currentModel._id)}
+                    <Button size="small" variant={'contained'} disabled={isApprovedDisabled}
+                            onClick={() => handleApprove(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                    <Button size="small" variant={'contained'} onClick={() => handleReject(currentModel._id)}
+                    <Button size="small" variant={'contained'} onClick={() => handleReject(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
                 </div>}
             </Paper>
-            {isActiveUserSection && (queryApprovedUsers.data?.length ||queryRejectedUsers.data?.length) && <Paper className={styles.Users}>
-                <h3>Users</h3>
-                <div className={styles.wrapperUsers}>
-                    {approvedUsers.map((user)=> <div className={styles.user}><img alt={''} src={ApproveIcon} className={styles.approvedIcon}/>Email: {user.email}</div>)}
-                    {rejectedUsers.map((user)=> <div className={styles.user}><img alt={''} src={RejectIcon} className={styles.rejectedIcon}/>Email: {user.email}</div>)}
-                </div>
-            </Paper>}
+            {isActiveUserSection && (queryApprovedUsers.data?.length || queryRejectedUsers.data?.length) &&
+                <Paper className={styles.Users}>
+                    <h3>Users</h3>
+                    <div className={styles.wrapperUsers}>
+                        {approvedUsers.map((user) => <div className={styles.user}><img alt={''} src={ApproveIcon}
+                                                                                       className={styles.approvedIcon}/>Email: {user.email}
+                        </div>)}
+                        {rejectedUsers.map((user) => <div className={styles.user}><img alt={''} src={RejectIcon}
+                                                                                       className={styles.rejectedIcon}/>Email: {user.email}
+                        </div>)}
+                    </div>
+                </Paper>}
         </Box>
     </div>
 }

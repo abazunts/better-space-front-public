@@ -34,7 +34,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        EntireModelsApi.likeModel(id, type).then(() => {
+        EntireModelsApi.likeModel(id).then(() => {
             refetch().then()
         })
 
@@ -50,7 +50,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        type && EntireModelsApi.approveModel(id, type).then(() => {
+        type && EntireModelsApi.approveModel(id).then(() => {
             refetch().then()
         })
 
@@ -62,7 +62,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             return
         }
         dispatch(setLoading({isLoading: true}))
-        type && EntireModelsApi.rejectModel(id, type).then(() => {
+        type && EntireModelsApi.rejectModel(id).then(() => {
             refetch().then()
         })
     }
@@ -91,7 +91,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     }, [data])
     return <div className={styles.listWrapper}>
         <div className={styles.List}>
-            {models.map((model) => <div className={styles.listItem}><ModelCard key={model.modelId} item={model}
+            {models.map((model) => <div key={model.modelId} className={styles.listItem}><ModelCard  item={model}
                                                                                type={type} handleLike={handleLike}
                                                                                handleMessage={handleMessage}
                                                                                isLogin={isLogin} handleApprove={handleApprove} handleReject={handleReject}/>

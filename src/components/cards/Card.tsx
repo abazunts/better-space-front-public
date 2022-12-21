@@ -59,16 +59,15 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
             }
         }))
     }
-
     const modelId = type.toUpperCase() + item.modelId
-    const isApprovedDisabled = !!item.approvedEntities.find((a) => a.user === user?._id)
-    const isRejectedDisabled = !!item.rejectedEntities.find((a) => a.user === user?._id)
-    const isLikeDisabled = !!item.likeEntities.find((a) => a.user === user?._id)
+    const isApprovedDisabled = !user ? false : !!item.approvedEntities.find((a) => a.user === user?._id)
+    const isRejectedDisabled = !user ? false : !!item.rejectedEntities.find((a) => a.user === user?._id)
+    const isLikeDisabled = !user ? false : !!item.likeEntities.find((a) => a.user === user?._id)
 
     const isActiveModeratorActions = user ? user?.roles.indexOf(RolesEnum.Moderator) > -1 || user?.roles.indexOf(RolesEnum.Admin) > -1 : false
     return (
         <Card sx={{maxWidth: 240}}>
-            <NavLink to={Routers.models.model.getUrl(type, item._id)}>
+            <NavLink to={Routers.models.model.getUrl(type, item.modelId)}>
                 <div className={styles.wrapperImage}>
                     <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount} approvedCount={item.approvedCount} rejectedCount={item.rejectedCount}/>
                 </div>
@@ -93,15 +92,15 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 </Typography>
             </CardContent>
             <div className={styles.actions}>
-                <Button size="small" variant={'contained'} disabled={isLikeDisabled} onClick={() => handleLike(item._id)}
+                <Button size="small" variant={'contained'} disabled={isLikeDisabled} onClick={() => handleLike(item.entireType+item.modelId)}
                         className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleMessage(item._id)}
+                <Button size="small" variant={'contained'} onClick={() => handleMessage(item.entireType+item.modelId)}
                         className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(item._id)}
+                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(item.entireType+item.modelId)}
                         className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleReject(item._id)}
+                <Button size="small" variant={'contained'} onClick={() => handleReject(item.entireType+item.modelId)}
                         className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
             </div>}
         </Card>
