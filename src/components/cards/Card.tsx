@@ -60,9 +60,9 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
         }))
     }
     const modelId = type.toUpperCase() + item.modelId
-    const isApprovedDisabled = !!user?.approved.find((l) => l === item._id)
-    const isRejectedDisabled = !!user?.rejected.find((l) => l === item._id)
-    const isLikeDisabled = !!user?.like.find((l) => l === item._id)
+    const isApprovedDisabled = !!user?.approved?.find((l) => l === item._id)
+    const isRejectedDisabled = !!user?.rejected?.find((l) => l === item._id)
+    const isLikeDisabled = !!user?.like?.find((l) => l === item._id)
 
     const isActiveModeratorActions = user ? user?.roles.indexOf(RolesEnum.Moderator) > -1 || user?.roles.indexOf(RolesEnum.Admin) > -1 : false
     return (
