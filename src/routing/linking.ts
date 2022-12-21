@@ -76,9 +76,9 @@ export const Routers = {
             path: '/:type',
         },
         model: {
-            path: '/:type/:id',
-            getUrl(type: EntireType, id: string) {
-                return `/${type}/${id}`;
+            path: '/:modelId',
+            getUrl(type: EntireType, modelId: string) {
+                return `/${type}${modelId}`;
             },
         },
     },

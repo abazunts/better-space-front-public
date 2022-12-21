@@ -5,7 +5,7 @@ class ApiSettings {
     constructor(
         private envVariables: EnvironmentVariable,
     ) {
-        this.API_BASE_URL = envVariables.REACT_APP_API_BASE_URL || 'http://localhost:4929/api'// 'https://dev-better-space-api.herokuapp.com/api'
+        this.API_BASE_URL = envVariables.REACT_APP_API_BASE_URL || 'http://localhost:4930/api'// 'https://dev-better-space-api.herokuapp.com/api'
     }
 }
 
