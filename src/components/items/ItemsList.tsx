@@ -6,7 +6,15 @@ import {Pagination} from "@mui/material";
 import styles from './list.module.scss'
 import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {setLoading, setModels, setPage, setPageCount, setTotalCount} from "../../bll/models-slice";
+import {
+    setApprovedCount,
+    setLikeCount,
+    setLoading,
+    setModels,
+    setPage,
+    setPageCount, setRejectedCount,
+    setTotalCount
+} from "../../bll/models-slice";
 import {RootState} from "../../bll/store";
 import {setIsLogin} from "../../bll/auth-slice";
 
@@ -28,14 +36,13 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     const changeCurrentPage = (page: number) => {
         dispatch(setPage({page}))
     }
-    const handleLike = (id: string) => {
+    const handleLike = (id: string, modelId: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
             return
         }
-        // dispatch(setLoading({isLoading: true}))
+        dispatch(setLikeCount({modelId}))
         EntireModelsApi.likeModel(id).then(() => {
-            refetch().then()
         })
 
     }
@@ -44,26 +51,24 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
         alert('В разработке')
     }
 
-    const handleApprove = (id: string) => {
+    const handleApprove = (id: string, modelId: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
             return
         }
-        // dispatch(setLoading({isLoading: true}))
+        dispatch(setApprovedCount({modelId}))
         type && EntireModelsApi.approveModel(id).then(() => {
-            refetch().then()
         })
 
     }
 
-    const handleReject = (id: string) => {
+    const handleReject = (id: string, modelId: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
             return
         }
-        // dispatch(setLoading({isLoading: true}))
+        dispatch(setRejectedCount({modelId}))
         type && EntireModelsApi.rejectModel(id).then(() => {
-            refetch().then()
         })
     }
 

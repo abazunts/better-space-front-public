@@ -70,10 +70,41 @@ export const modelsSlice = createSlice({
         setRejectedUsers: (state, action: PayloadAction<{ users: UserEntity[] }>) => {
             state.rejectedUsers = action.payload.users
         },
+        setRejectedCount: (state, action: PayloadAction<{ modelId: string }>) => {
+            const model = state.models.find((m) => m.modelId === action.payload.modelId)
+            if (model) {
+                model.rejectedCount += 1
+            }
+        },
+        setLikeCount: (state, action: PayloadAction<{ modelId: string }>) => {
+            const model = state.models.find((m) => m.modelId === action.payload.modelId)
+            if (model) {
+                model.likeCount += 1
+            }
+        },
+        setApprovedCount: (state, action: PayloadAction<{ modelId: string }>) => {
+            const model = state.models.find((m) => m.modelId === action.payload.modelId)
+            if (model) {
+                model.approvedCount += 1
+            }
+        },
     },
 
 })
 
-export const {setModels, setLoading, setPage, setPageCount, setFilter, setTotalCount, setCurrentModel, setApprovedUsers, setRejectedUsers} = modelsSlice.actions
+export const {
+    setModels,
+    setLoading,
+    setPage,
+    setPageCount,
+    setFilter,
+    setTotalCount,
+    setCurrentModel,
+    setApprovedUsers,
+    setRejectedUsers,
+    setRejectedCount,
+    setApprovedCount,
+    setLikeCount
+} = modelsSlice.actions
 
 export const modelsReducer = modelsSlice.reducer

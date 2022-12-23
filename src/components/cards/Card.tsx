@@ -21,10 +21,10 @@ import {RolesEnum} from "../../api/google-auth-api";
 type PropsType = {
     item: EntireModelType
     type: EntireType
-    handleLike: (id: string) => void
+    handleLike: (id: string, modelId: string) => void
     handleMessage: (id: string) => void
-    handleApprove: (id: string) => void
-    handleReject: (id: string) => void
+    handleApprove: (id: string, modelId: string) => void
+    handleReject: (id: string, modelId: string) => void
     isLogin: boolean
 }
 
@@ -37,17 +37,17 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
 
     const like = (id: string) => {
         setLoadingLike(true)
-        handleLike(id)
+        handleLike(id, item.modelId)
     }
 
     const approve = (id: string) => {
         setLoadingApprove(true)
-        handleApprove(id)
+        handleApprove(id, item.modelId)
     }
 
     const reject = (id: string) => {
         setLoadingReject(true)
-        handleReject(id)
+        handleReject(id, item.modelId)
     }
     const handleCreator = (creator: string) => {
         dispatch(setFilter({
