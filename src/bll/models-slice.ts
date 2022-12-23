@@ -1,11 +1,14 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {EntireModelType} from "../api/entire-models.api";
 import {UserEntity} from "../api/google-auth-api";
+import {Dayjs} from "dayjs";
 
 export type FilterType = {
     creator: string
     promoter: string
     moderator: string
+    from: Dayjs | null
+    to: Dayjs | null
 }
 
 export interface CounterState {
@@ -31,7 +34,9 @@ const initialState: CounterState = {
     filter: {
         creator: '',
         promoter: '',
-        moderator: ''
+        moderator: '',
+        from: null,
+        to: null
     },
     totalCount: 0,
     approvedUsers: [],
@@ -70,6 +75,7 @@ export const modelsSlice = createSlice({
         setRejectedUsers: (state, action: PayloadAction<{ users: UserEntity[] }>) => {
             state.rejectedUsers = action.payload.users
         },
+
         setRejectedCount: (state, action: PayloadAction<{ modelId: string }>) => {
             const model = state.models.find((m) => m.modelId === action.payload.modelId)
             if (model) {
@@ -88,6 +94,22 @@ export const modelsSlice = createSlice({
                 model.approvedCount += 1
             }
         },
+        setRejectedCountCurrentModel: (state) => {
+            if (state.currentModel) {
+                state.currentModel.rejectedCount += 1
+            }
+
+        },
+        setLikeCountCurrentModel: (state) => {
+            if (state.currentModel) {
+                state.currentModel.likeCount += 1
+            }
+        },
+        setApprovedCountCurrentModel: (state) => {
+            if (state.currentModel) {
+                state.currentModel.approvedCount += 1
+            }
+        },
     },
 
 })
@@ -104,7 +126,10 @@ export const {
     setRejectedUsers,
     setRejectedCount,
     setApprovedCount,
-    setLikeCount
+    setLikeCount,
+    setRejectedCountCurrentModel,
+    setLikeCountCurrentModel,
+    setApprovedCountCurrentModel
 } = modelsSlice.actions
 
 export const modelsReducer = modelsSlice.reducer

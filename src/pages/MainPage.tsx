@@ -17,6 +17,8 @@ export const MainPage = () => {
                 promoter: '',
                 moderator: '',
                 creator: '',
+                from: null,
+                to: null
             }
         }))
         dispatch(setPage({page: 1}))

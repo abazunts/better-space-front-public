@@ -16,7 +16,6 @@ import {
     setTotalCount
 } from "../../bll/models-slice";
 import {RootState} from "../../bll/store";
-import {setIsLogin} from "../../bll/auth-slice";
 
 type PropsType = {
     isLogin: boolean
@@ -77,7 +76,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
         data,
         isFetching,
         refetch
-    } = useQuery(['models', filter, type, page, pageSize, sorting], async () => await EntireModelsApi.getModels(type, page, pageSize, filter.creator, filter.moderator, filter.promoter, sorting), {keepPreviousData: true})
+    } = useQuery(['models', filter, type, page, pageSize, sorting], async () => await EntireModelsApi.getModels(type, page, pageSize, filter.creator, filter.moderator, filter.promoter, sorting, filter.from?.toISOString(), filter.to?.toISOString()), {keepPreviousData: true})
 
     useEffect(() => {
         dispatch(setLoading({isLoading}))

@@ -43,7 +43,7 @@ export type PaginateType<I> = {
 }
 
 export const EntireModelsApi = {
-    getModels(type: EntireType, page: number, pageSize: number, owner_name?: string, moderator?: string, promo_code?: string, sorting = 0): Promise<PaginateType<EntireModelType[]>> {
+    getModels(type: EntireType, page: number, pageSize: number, owner_name?: string, moderator?: string, promo_code?: string, sorting = 0, from?: string,  to?: string): Promise<PaginateType<EntireModelType[]>> {
         return AxiosInstance.get(`/models`, {
             params: {
                 type: type.toUpperCase(),
@@ -52,7 +52,9 @@ export const EntireModelsApi = {
                 owner_name,
                 moderator,
                 promo_code,
-                sorting
+                sorting,
+                from,
+                to
             }
         }).then((r) => r.data)
     },

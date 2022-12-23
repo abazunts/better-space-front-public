@@ -55,6 +55,8 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 promoter: '',
                 moderator: '',
                 creator,
+                from: null,
+                to: null
             }
         }))
     }
@@ -64,6 +66,8 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 promoter: promoter || '',
                 moderator: '',
                 creator: '',
+                from: null,
+                to: null
             }
         }))
     }
@@ -73,6 +77,8 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 promoter: '',
                 moderator: moderator || '',
                 creator: '',
+                from: null,
+                to: null
             }
         }))
     }

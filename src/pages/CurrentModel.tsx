@@ -2,10 +2,18 @@ import {useParams, useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../bll/store";
 import * as React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useQuery} from "react-query";
 import {EntireModelsApi, EntireType} from "../api/entire-models.api";
-import {setApprovedUsers, setCurrentModel, setLoading, setRejectedUsers} from "../bll/models-slice";
+import {
+    setApprovedCount,
+    setApprovedCountCurrentModel,
+    setApprovedUsers,
+    setCurrentModel,
+    setLikeCountCurrentModel,
+    setLoading, setRejectedCountCurrentModel,
+    setRejectedUsers
+} from "../bll/models-slice";
 import Box from "@mui/material/Box";
 import {Paper} from "@mui/material";
 import styles from './current-model.module.scss'
@@ -46,6 +54,9 @@ export const CurrentModel = () => {
     const isActiveUserSection = user ? user?.roles.indexOf(RolesEnum.Admin) > -1 : false
     const type = getType(params.modelId)
     const id = getModelId(params.modelId, type)
+    const [loadingLike, setLoadingLike] = useState(false)
+    const [loadingApprove, setLoadingApprove] = useState(false)
+    const [loadingReject, setLoadingReject] = useState(false)
 
 
     const approvedUserIds = currentModel?.approvedEntities.map((a) => a.user) || []
@@ -88,9 +99,9 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        setLoadingLike(true)
+        dispatch(setLikeCountCurrentModel())
         type && EntireModelsApi.likeModel(id).then(() => {
-            refetch().then()
         })
 
     }
@@ -104,9 +115,9 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        setLoadingApprove(true)
+        dispatch(setApprovedCountCurrentModel())
         type && EntireModelsApi.approveModel(id).then(() => {
-            refetch().then()
         })
 
     }
@@ -116,9 +127,9 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        setLoadingReject(true)
+        dispatch(setRejectedCountCurrentModel())
         type && EntireModelsApi.rejectModel(id).then(() => {
-            refetch().then()
         })
     }
     const authMe = async () => {
@@ -192,18 +203,18 @@ export const CurrentModel = () => {
                     </Typography>
                 </CardContent>
                 <div className={styles.actions}>
-                    <Button size="small" variant={'contained'} disabled={isLikeDisabled}
+                    <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled}
                             onClick={() => handleLike(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
                     <Button size="small" variant={'contained'} onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
                 </div>
                 {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                    <Button size="small" variant={'contained'} disabled={isApprovedDisabled}
+                    <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled}
                             onClick={() => handleApprove(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
                     <Button size="small" variant={'contained'} onClick={() => handleReject(currentModel?.entireType + currentModel?.modelId)}
-                            className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
+                            className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
                 </div>}
             </Paper>
             {isActiveUserSection && (queryApprovedUsers.data?.length || queryRejectedUsers.data?.length) &&
