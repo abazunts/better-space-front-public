@@ -33,7 +33,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        // dispatch(setLoading({isLoading: true}))
         EntireModelsApi.likeModel(id).then(() => {
             refetch().then()
         })
@@ -49,7 +49,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        // dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.approveModel(id).then(() => {
             refetch().then()
         })
@@ -61,7 +61,7 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
             setSearchParams('login=true')
             return
         }
-        dispatch(setLoading({isLoading: true}))
+        // dispatch(setLoading({isLoading: true}))
         type && EntireModelsApi.rejectModel(id).then(() => {
             refetch().then()
         })

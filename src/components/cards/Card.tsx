@@ -1,12 +1,11 @@
 import * as React from 'react';
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {ModelType} from "../../api/models.api";
 import styles from "./card.module.scss"
-import {EntireModelsApi, EntireModelType, EntireType} from "../../api/entire-models.api";
+import {EntireModelType, EntireType} from "../../api/entire-models.api";
 import {CardImage} from "../image/CardImage";
 import LikeIcon from "../../assets/icons/like.png";
 import ApproveIcon from '../../assets/icons/approve.png'
@@ -31,7 +30,25 @@ type PropsType = {
 
 export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin, handleApprove, handleReject}) => {
     const dispatch = useDispatch()
+    const [loadingLike, setLoadingLike] = useState(false)
+    const [loadingApprove, setLoadingApprove] = useState(false)
+    const [loadingReject, setLoadingReject] = useState(false)
     const user = useSelector((state: RootState) => state.authReducer.user)
+
+    const like = (id: string) => {
+        setLoadingLike(true)
+        handleLike(id)
+    }
+
+    const approve = (id: string) => {
+        setLoadingApprove(true)
+        handleApprove(id)
+    }
+
+    const reject = (id: string) => {
+        setLoadingReject(true)
+        handleReject(id)
+    }
     const handleCreator = (creator: string) => {
         dispatch(setFilter({
             filter: {
@@ -92,16 +109,16 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 </Typography>
             </CardContent>
             <div className={styles.actions}>
-                <Button size="small" variant={'contained'} disabled={isLikeDisabled} onClick={() => handleLike(item.entireType+item.modelId)}
+                <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled} onClick={() => like(item.entireType+item.modelId)}
                         className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
                 <Button size="small" variant={'contained'} onClick={() => handleMessage(item.entireType+item.modelId)}
                         className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                <Button size="small" variant={'contained'} disabled={isApprovedDisabled} onClick={() => handleApprove(item.entireType+item.modelId)}
+                <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled} onClick={() => approve(item.entireType+item.modelId)}
                         className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleReject(item.entireType+item.modelId)}
-                        className={styles.help} disabled={isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
+                <Button size="small" variant={'contained'} onClick={() => reject(item.entireType+item.modelId)}
+                        className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
             </div>}
         </Card>
     );
