@@ -29,6 +29,8 @@ import {setIsLogin, setUser} from "../bll/auth-slice";
 import {GoogleAuthApi, RolesEnum} from "../api/google-auth-api";
 import ApproveIcon from "../assets/icons/approve.png";
 import RejectIcon from "../assets/icons/reject.png";
+import {getLocaleDateStringForHours} from "../utils/get-date-format";
+import { formatInTimeZone } from 'date-fns-tz'
 
 export const getType = (modelId: string | undefined): EntireType | null => {
     if (!modelId) return null
@@ -149,11 +151,11 @@ export const CurrentModel = () => {
     if (!currentModel) {
         return <SimpleBackdrop/>
     }
-    console.log(currentModel)
 
-    const createdDate = currentModel.server_timestamp && new Date(currentModel.server_timestamp).toLocaleDateString()
-    const createdTime = currentModel.server_timestamp && new Date(currentModel.server_timestamp).toLocaleTimeString()
+    // const createdDate = formatInTimeZone(new Date(currentModel.server_timestamp), Intl.DateTimeFormat().resolvedOptions().timeZone, 'LLL dd yyyy hh:mm a zzz')
+    const createdDate = getLocaleDateStringForHours(new Date(currentModel.server_timestamp))
 
+    console.log()
 
     const isApprovedDisabled = !user ? false : !!currentModel?.approvedEntities?.find((a) => a.user === user?._id)
     const isRejectedDisabled = !user ? false : !!currentModel?.rejectedEntities?.find((a) => a.user === user?._id)
@@ -177,7 +179,7 @@ export const CurrentModel = () => {
                                            rejectedCount={currentModel.rejectedCount}/>
                 </div>
                 <div className={styles.date}>
-                    <span className={styles.linkFilter}>{createdDate} {createdTime}</span>
+                    <span className={styles.linkFilter}>{createdDate}</span>
                 </div>
                 <CardContent>
                     <Typography component="div" className={styles.Typography}>
@@ -207,7 +209,7 @@ export const CurrentModel = () => {
                             onClick={() => handleLike(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
                     <Button size="small" variant={'contained'} onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
-                            className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
+                            className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
                 </div>
                 {isActiveModeratorActions && <div className={styles.moderatorActions}>
                     <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled}

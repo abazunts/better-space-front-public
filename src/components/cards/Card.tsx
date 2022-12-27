@@ -118,7 +118,7 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled} onClick={() => like(item.entireType+item.modelId)}
                         className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
                 <Button size="small" variant={'contained'} onClick={() => handleMessage(item.entireType+item.modelId)}
-                        className={styles.help}><img alt={''} src={MessageIcon}/>Пожаловаться</Button>
+                        className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
                 <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled} onClick={() => approve(item.entireType+item.modelId)}
