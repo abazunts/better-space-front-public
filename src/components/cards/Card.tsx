@@ -28,7 +28,15 @@ type PropsType = {
     isLogin: boolean
 }
 
-export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike, isLogin, handleApprove, handleReject}) => {
+export const ModelCard: FC<PropsType> = ({
+                                             item,
+                                             type,
+                                             handleMessage,
+                                             handleLike,
+                                             isLogin,
+                                             handleApprove,
+                                             handleReject
+                                         }) => {
     const dispatch = useDispatch()
     const [loadingLike, setLoadingLike] = useState(false)
     const [loadingApprove, setLoadingApprove] = useState(false)
@@ -92,12 +100,14 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
         <Card sx={{maxWidth: 240}}>
             <NavLink to={Routers.models.model.getUrl(type, item.modelId)}>
                 <div className={styles.wrapperImage}>
-                    <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount} approvedCount={item.approvedCount} rejectedCount={item.rejectedCount}/>
+                    <CardImage preview_base64={item.preview_base64} likeCount={item.likeCount}
+                               approvedCount={item.approvedCount} rejectedCount={item.rejectedCount}/>
                 </div>
             </NavLink>
             <CardContent>
                 <Typography component="div" className={styles.Typography}>
-                    <span>{modelId}</span>
+                    <span><a href={process.env.REACT_APP_VIEWER_BASE_URL + modelId}
+                             target={'_blank'} rel="noreferrer" >{modelId}</a></span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     <div>
@@ -115,16 +125,19 @@ export const ModelCard: FC<PropsType> = ({item, type, handleMessage, handleLike,
                 </Typography>
             </CardContent>
             <div className={styles.actions}>
-                <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled} onClick={() => like(item.entireType+item.modelId)}
+                <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled}
+                        onClick={() => like(item.entireType + item.modelId)}
                         className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
-                <Button size="small" variant={'contained'} onClick={() => handleMessage(item.entireType+item.modelId)}
+                <Button size="small" variant={'contained'} onClick={() => handleMessage(item.entireType + item.modelId)}
                         className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled} onClick={() => approve(item.entireType+item.modelId)}
+                <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled}
+                        onClick={() => approve(item.entireType + item.modelId)}
                         className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                <Button size="small" variant={'contained'} onClick={() => reject(item.entireType+item.modelId)}
-                        className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
+                <Button size="small" variant={'contained'} onClick={() => reject(item.entireType + item.modelId)}
+                        className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''}
+                                                                                                    src={RejectIcon}/>Reject</Button>
             </div>}
         </Card>
     );

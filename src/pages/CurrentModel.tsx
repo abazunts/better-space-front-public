@@ -183,7 +183,8 @@ export const CurrentModel = () => {
                 </div>
                 <CardContent>
                     <Typography component="div" className={styles.Typography}>
-                        <span>{type + currentModel.modelId}</span>
+                        {type && <span><a href={process.env.REACT_APP_VIEWER_BASE_URL + type + currentModel.modelId}
+                                 target={'_blank'} rel="noreferrer" >{type + currentModel.modelId}</a></span>}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         <div>
@@ -199,7 +200,8 @@ export const CurrentModel = () => {
                         <div className={styles.partsWrapper}>
                             <span>PARTS: </span>
                             <div className={styles.linkFilter}>{currentModel.parts?.map((p) => <div
-                                className={styles.parts}>{p}</div>)}</div>
+                                className={styles.parts}><a href={process.env.REACT_APP_VIEWER_BASE_URL + p}
+                                                            target={'_blank'} rel="noreferrer" >{p}</a></div>)}</div>
                         </div>
 
                     </Typography>
