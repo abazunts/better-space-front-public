@@ -131,7 +131,7 @@ export const CurrentModel = () => {
             return
         }
 
-        setLoadingApprove(true)
+        setLoadingApprove(false)
         dispatch(deleteApprovedCountCurrentModel())
         type && EntireModelsApi.deleteApproveModel(id).then(() => {
         })
@@ -154,7 +154,7 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        setLoadingReject(true)
+        setLoadingReject(false)
         dispatch(deleteRejectedCountCurrentModel())
         type && EntireModelsApi.deleteRejectModel(id).then(() => {
         })
