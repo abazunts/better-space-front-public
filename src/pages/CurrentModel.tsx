@@ -182,9 +182,9 @@ export const CurrentModel = () => {
 
     console.log()
 
-    const isApprovedDisabled = !user ? false : !!currentModel?.approvedEntities?.find((a) => a.user === user?._id)
-    const isRejectedDisabled = !user ? false : !!currentModel?.rejectedEntities?.find((a) => a.user === user?._id)
-    const isLikeDisabled = !user ? false : !!currentModel?.likeEntities?.find((a) => a.user === user?._id)
+    const isApprovedDisabled = !!currentModel?.approvedEntities?.filter((l) => l.user === user?._id).length
+    const isRejectedDisabled = !!currentModel?.rejectedEntities?.filter((l) => l.user === user?._id).length
+    const isLikeDisabled = !!currentModel?.likeEntities?.filter((l) => l.user === user?._id).length
     return <div className={styles.wrapper}>
         {searchParams.get('login') && <AuthGoogleModal handleSuccessCallback={handleLogin}/>}
         <Box
