@@ -58,7 +58,7 @@
 .moderatorActions {
   display: flex;
   justify-content: space-between;
-  .like {
+  .approve {
     background-color: #0b7e00;
     color: #ffffff;
     font-weight: 700;
@@ -70,7 +70,7 @@
       margin-right: 5px;
     }
   }
-  .help {
+  .reject {
     background-color: #be0000;;
     color: #ffffff;
     font-weight: 700;

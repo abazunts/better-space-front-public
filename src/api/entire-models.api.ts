@@ -80,6 +80,14 @@ export const EntireModelsApi = {
         return AxiosInstance.get(`/users/actions?usersId=${userIds.join(',')}`).then((r) => r.data)
     },
 
+    deleteApproveModel(id: string): Promise<EntireModelType> {
+        return AxiosInstance.delete(`/approve/${id}`).then((r) => r.data)
+    },
+
+    deleteRejectModel(id: string): Promise<EntireModelType> {
+        return AxiosInstance.delete(`/reject/${id}`).then((r) => r.data)
+    },
+
 
 }
 

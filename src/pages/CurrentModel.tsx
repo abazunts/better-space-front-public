@@ -6,6 +6,8 @@ import {useEffect, useState} from "react";
 import {useQuery} from "react-query";
 import {EntireModelsApi, EntireType} from "../api/entire-models.api";
 import {
+    deleteApprovedCount, deleteApprovedCountCurrentModel,
+    deleteRejectedCount, deleteRejectedCountCurrentModel,
     setApprovedCount,
     setApprovedCountCurrentModel,
     setApprovedUsers,
@@ -30,7 +32,7 @@ import {GoogleAuthApi, RolesEnum} from "../api/google-auth-api";
 import ApproveIcon from "../assets/icons/approve.png";
 import RejectIcon from "../assets/icons/reject.png";
 import {getLocaleDateStringForHours} from "../utils/get-date-format";
-import { formatInTimeZone } from 'date-fns-tz'
+import {formatInTimeZone} from 'date-fns-tz'
 
 export const getType = (modelId: string | undefined): EntireType | null => {
     if (!modelId) return null
@@ -121,6 +123,18 @@ export const CurrentModel = () => {
         dispatch(setApprovedCountCurrentModel())
         type && EntireModelsApi.approveModel(id).then(() => {
         })
+    }
+
+    const handleDeleteApprove = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+
+        setLoadingApprove(true)
+        dispatch(deleteApprovedCountCurrentModel())
+        type && EntireModelsApi.deleteApproveModel(id).then(() => {
+        })
 
     }
 
@@ -132,6 +146,17 @@ export const CurrentModel = () => {
         setLoadingReject(true)
         dispatch(setRejectedCountCurrentModel())
         type && EntireModelsApi.rejectModel(id).then(() => {
+        })
+    }
+
+    const handleDeleteReject = (id: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+        setLoadingReject(true)
+        dispatch(deleteRejectedCountCurrentModel())
+        type && EntireModelsApi.deleteRejectModel(id).then(() => {
         })
     }
     const authMe = async () => {
@@ -184,7 +209,7 @@ export const CurrentModel = () => {
                 <CardContent>
                     <Typography component="div" className={styles.Typography}>
                         {type && <span><a href={process.env.REACT_APP_VIEWER_BASE_URL + type + currentModel.modelId}
-                                 target={'_blank'} rel="noreferrer" >{type + currentModel.modelId}</a></span>}
+                                          target={'_blank'} rel="noreferrer">{type + currentModel.modelId}</a></span>}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         <div>
@@ -201,7 +226,7 @@ export const CurrentModel = () => {
                             <span>PARTS: </span>
                             <div className={styles.linkFilter}>{currentModel.parts?.map((p) => <div
                                 className={styles.parts}><a href={process.env.REACT_APP_VIEWER_BASE_URL + p}
-                                                            target={'_blank'} rel="noreferrer" >{p}</a></div>)}</div>
+                                                            target={'_blank'} rel="noreferrer">{p}</a></div>)}</div>
                         </div>
 
                     </Typography>
@@ -210,15 +235,18 @@ export const CurrentModel = () => {
                     <Button size="small" variant={'contained'} disabled={loadingLike || isLikeDisabled}
                             onClick={() => handleLike(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={LikeIcon}/>Like</Button>
-                    <Button size="small" variant={'contained'} onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
+                    <Button size="small" variant={'contained'}
+                            onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
                 </div>
-                {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                    <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled}
-                            onClick={() => handleApprove(currentModel?.entireType + currentModel?.modelId)}
+                {!isActiveModeratorActions && <div className={styles.moderatorActions}>
+                    <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}} variant={'contained'} disabled={loadingApprove}
+                            onClick={() => isApprovedDisabled ? handleDeleteApprove(currentModel?.entireType + currentModel?.modelId) : handleApprove(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                    <Button size="small" variant={'contained'} onClick={() => handleReject(currentModel?.entireType + currentModel?.modelId)}
-                            className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''} src={RejectIcon}/>Reject</Button>
+                    <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}}  variant={'contained'}
+                            onClick={() => isRejectedDisabled ? handleDeleteReject(currentModel?.entireType + currentModel?.modelId) : handleReject(currentModel?.entireType + currentModel?.modelId)}
+                            className={styles.help} disabled={loadingReject}><img alt={''}
+                                                                                                        src={RejectIcon}/>Reject</Button>
                 </div>}
             </Paper>
             {isActiveUserSection && (queryApprovedUsers.data?.length || queryRejectedUsers.data?.length) &&

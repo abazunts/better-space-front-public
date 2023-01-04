@@ -25,6 +25,8 @@ type PropsType = {
     handleMessage: (id: string) => void
     handleApprove: (id: string, modelId: string) => void
     handleReject: (id: string, modelId: string) => void
+    handleDeleteApprove: (id: string, modelId: string) => void
+    handleDeleteReject: (id: string, modelId: string) => void
     isLogin: boolean
 }
 
@@ -35,7 +37,9 @@ export const ModelCard: FC<PropsType> = ({
                                              handleLike,
                                              isLogin,
                                              handleApprove,
-                                             handleReject
+                                             handleReject,
+                                             handleDeleteReject,
+                                             handleDeleteApprove
                                          }) => {
     const dispatch = useDispatch()
     const [loadingLike, setLoadingLike] = useState(false)
@@ -56,6 +60,16 @@ export const ModelCard: FC<PropsType> = ({
     const reject = (id: string) => {
         setLoadingReject(true)
         handleReject(id, item.modelId)
+    }
+
+    const deleteApprove = (id: string) => {
+        setLoadingApprove(true)
+        handleDeleteApprove(id, item.modelId)
+    }
+
+    const deleteReject = (id: string) => {
+        setLoadingReject(true)
+        handleDeleteReject(id, item.modelId)
     }
     const handleCreator = (creator: string) => {
         dispatch(setFilter({
@@ -107,7 +121,7 @@ export const ModelCard: FC<PropsType> = ({
             <CardContent>
                 <Typography component="div" className={styles.Typography}>
                     <span><a href={process.env.REACT_APP_VIEWER_BASE_URL + modelId}
-                             target={'_blank'} rel="noreferrer" >{modelId}</a></span>
+                             target={'_blank'} rel="noreferrer">{modelId}</a></span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     <div>
@@ -132,12 +146,14 @@ export const ModelCard: FC<PropsType> = ({
                         className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
             </div>
             {isActiveModeratorActions && <div className={styles.moderatorActions}>
-                <Button size="small" variant={'contained'} disabled={loadingApprove || isApprovedDisabled}
-                        onClick={() => approve(item.entireType + item.modelId)}
-                        className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                <Button size="small" variant={'contained'} onClick={() => reject(item.entireType + item.modelId)}
-                        className={styles.help} disabled={loadingReject || isRejectedDisabled}><img alt={''}
-                                                                                                    src={RejectIcon}/>Reject</Button>
+                <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}} variant={'contained'}
+                        disabled={loadingApprove}
+                        onClick={() => isApprovedDisabled ? deleteApprove(item.entireType + item.modelId) : approve(item.entireType + item.modelId)}
+                        className={styles.approve}><img alt={''} src={ApproveIcon}/>Approve</Button>
+                <Button size="small" style={{background: isRejectedDisabled ? 'grey' : ''}} variant={'contained'}
+                        onClick={() => isRejectedDisabled ? deleteReject(item.entireType + item.modelId) : reject(item.entireType + item.modelId)}
+                        className={styles.reject} disabled={loadingReject}><img alt={''}
+                                                                                src={RejectIcon}/>Reject</Button>
             </div>}
         </Card>
     );

@@ -82,6 +82,12 @@ export const modelsSlice = createSlice({
                 model.rejectedCount += 1
             }
         },
+        deleteRejectedCount: (state, action: PayloadAction<{ modelId: string }>) => {
+            const model = state.models.find((m) => m.modelId === action.payload.modelId)
+            if (model) {
+                model.rejectedCount -= 1
+            }
+        },
         setLikeCount: (state, action: PayloadAction<{ modelId: string }>) => {
             const model = state.models.find((m) => m.modelId === action.payload.modelId)
             if (model) {
@@ -92,6 +98,12 @@ export const modelsSlice = createSlice({
             const model = state.models.find((m) => m.modelId === action.payload.modelId)
             if (model) {
                 model.approvedCount += 1
+            }
+        },
+        deleteApprovedCount: (state, action: PayloadAction<{ modelId: string }>) => {
+            const model = state.models.find((m) => m.modelId === action.payload.modelId)
+            if (model) {
+                model.approvedCount -= 1
             }
         },
         setRejectedCountCurrentModel: (state) => {
@@ -108,6 +120,16 @@ export const modelsSlice = createSlice({
         setApprovedCountCurrentModel: (state) => {
             if (state.currentModel) {
                 state.currentModel.approvedCount += 1
+            }
+        },
+        deleteRejectedCountCurrentModel: (state) => {
+            if (state.currentModel) {
+                state.currentModel.rejectedCount -= 1
+            }
+        },
+        deleteApprovedCountCurrentModel: (state) => {
+            if (state.currentModel) {
+                state.currentModel.approvedCount -= 1
             }
         },
     },
@@ -129,7 +151,11 @@ export const {
     setLikeCount,
     setRejectedCountCurrentModel,
     setLikeCountCurrentModel,
-    setApprovedCountCurrentModel
+    setApprovedCountCurrentModel,
+    deleteApprovedCount,
+    deleteRejectedCount,
+    deleteRejectedCountCurrentModel,
+    deleteApprovedCountCurrentModel
 } = modelsSlice.actions
 
 export const modelsReducer = modelsSlice.reducer

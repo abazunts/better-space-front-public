@@ -7,6 +7,8 @@ import styles from './list.module.scss'
 import {useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    deleteApprovedCount,
+    deleteRejectedCount,
     setApprovedCount,
     setLikeCount,
     setLoading,
@@ -61,6 +63,17 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
 
     }
 
+    const handleDeleteApprove = (id: string, modelId: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+        dispatch(deleteApprovedCount({modelId}))
+        type && EntireModelsApi.deleteApproveModel(id).then(() => {
+        })
+
+    }
+
     const handleReject = (id: string, modelId: string) => {
         if (!isLogin) {
             setSearchParams('login=true')
@@ -70,6 +83,17 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
         type && EntireModelsApi.rejectModel(id).then(() => {
         })
     }
+
+    const handleDeleteReject = (id: string, modelId: string) => {
+        if (!isLogin) {
+            setSearchParams('login=true')
+            return
+        }
+        dispatch(deleteRejectedCount({modelId}))
+        type && EntireModelsApi.deleteRejectModel(id).then(() => {
+        })
+    }
+
 
     const {
         isLoading,
@@ -95,10 +119,16 @@ export const ModelList: FC<PropsType> = ({isLogin, sorting}) => {
     }, [data])
     return <div className={styles.listWrapper}>
         <div className={styles.List}>
-            {models.map((model) => <div key={model.modelId} className={styles.listItem}><ModelCard  item={model}
-                                                                               type={type} handleLike={handleLike}
-                                                                               handleMessage={handleMessage}
-                                                                               isLogin={isLogin} handleApprove={handleApprove} handleReject={handleReject}/>
+            {models.map((model) => <div key={model.modelId} className={styles.listItem}><ModelCard item={model}
+                                                                                                   type={type}
+                                                                                                   handleLike={handleLike}
+                                                                                                   handleMessage={handleMessage}
+                                                                                                   isLogin={isLogin}
+                                                                                                   handleApprove={handleApprove}
+                                                                                                   handleReject={handleReject}
+                                                                                                   handleDeleteApprove={handleDeleteApprove}
+                                                                                                   handleDeleteReject={handleDeleteReject}
+            />
             </div>)}
 
         </div>
