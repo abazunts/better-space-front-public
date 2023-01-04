@@ -239,7 +239,7 @@ export const CurrentModel = () => {
                             onClick={() => handleMessage(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help}><img alt={''} src={MessageIcon}/>Comment</Button>
                 </div>
-                {!isActiveModeratorActions && <div className={styles.moderatorActions}>
+                {isActiveModeratorActions && <div className={styles.moderatorActions}>
                     <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}} variant={'contained'} disabled={loadingApprove}
                             onClick={() => isApprovedDisabled ? handleDeleteApprove(currentModel?.entireType + currentModel?.modelId) : handleApprove(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
