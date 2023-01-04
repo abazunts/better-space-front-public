@@ -63,12 +63,12 @@ export const ModelCard: FC<PropsType> = ({
     }
 
     const deleteApprove = (id: string) => {
-        setLoadingApprove(false)
+        setLoadingApprove(true)
         handleDeleteApprove(id, item.modelId)
     }
 
     const deleteReject = (id: string) => {
-        setLoadingReject(false)
+        setLoadingReject(true)
         handleDeleteReject(id, item.modelId)
     }
     const handleCreator = (creator: string) => {

@@ -131,7 +131,7 @@ export const CurrentModel = () => {
             return
         }
 
-        setLoadingApprove(false)
+        setLoadingApprove(true)
         dispatch(deleteApprovedCountCurrentModel())
         type && EntireModelsApi.deleteApproveModel(id).then(() => {
         })
@@ -154,7 +154,7 @@ export const CurrentModel = () => {
             setSearchParams('login=true')
             return
         }
-        setLoadingReject(false)
+        setLoadingReject(true)
         dispatch(deleteRejectedCountCurrentModel())
         type && EntireModelsApi.deleteRejectModel(id).then(() => {
         })
@@ -180,7 +180,6 @@ export const CurrentModel = () => {
     // const createdDate = formatInTimeZone(new Date(currentModel.server_timestamp), Intl.DateTimeFormat().resolvedOptions().timeZone, 'LLL dd yyyy hh:mm a zzz')
     const createdDate = getLocaleDateStringForHours(new Date(currentModel.server_timestamp))
 
-    console.log()
 
     const isApprovedDisabled = !!currentModel?.approvedEntities?.filter((l) => l.user === user?._id).length
     const isRejectedDisabled = !!currentModel?.rejectedEntities?.filter((l) => l.user === user?._id).length
@@ -243,7 +242,7 @@ export const CurrentModel = () => {
                     <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}} variant={'contained'} disabled={loadingApprove}
                             onClick={() => isApprovedDisabled ? handleDeleteApprove(currentModel?.entireType + currentModel?.modelId) : handleApprove(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.like}><img alt={''} src={ApproveIcon}/>Approve</Button>
-                    <Button size="small" style={{background: isApprovedDisabled ? 'grey' : ''}}  variant={'contained'}
+                    <Button size="small" style={{background: isRejectedDisabled ? 'grey' : ''}}  variant={'contained'}
                             onClick={() => isRejectedDisabled ? handleDeleteReject(currentModel?.entireType + currentModel?.modelId) : handleReject(currentModel?.entireType + currentModel?.modelId)}
                             className={styles.help} disabled={loadingReject}><img alt={''}
                                                                                                         src={RejectIcon}/>Reject</Button>
